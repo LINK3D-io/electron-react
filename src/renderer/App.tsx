@@ -10,7 +10,6 @@ function Main() {
   const { user, refreshUser } = useAuth();
 
   useEffect(() => {
-    console.log('MAIN user', user.isAuthenticated);
     if (user.isAuthenticated === null) {
       refreshUser(); // initializes user when isAuthenticated is not set
     }
