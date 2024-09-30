@@ -45,6 +45,12 @@ export const userActions = {
   UPDATE_PINNED_FACTIIIS: 'UPDATE_PINNED_FACTIIIS',
 };
 
+export const scannerActions = {
+  SET_ONLINE: 'SET_ONLINE',
+  SET_ERROR: 'SET_ERROR',
+  SET_MESSAGE: 'SET_MESSAGE',
+};
+
 export const factiiiActions = {
   SET_FACTIIIS: 'SET_FACTIIIS',
   ADD_FACTIII_ITEM: 'ADD_FACTIII_ITEM',
@@ -78,6 +84,12 @@ export type UserState = {
   user: CurrentUser;
 };
 
+export type ScannerState = {
+  online: boolean;
+  error: boolean;
+  message: string;
+};
+
 export const initialUserState: UserState = {
   user: {
     types: [],
@@ -106,6 +118,12 @@ export const initialUserState: UserState = {
     blocked: false,
     muted: false,
   },
+};
+
+export const initialScannerState: ScannerState = {
+  online: false,
+  error: false,
+  message: '',
 };
 
 export const initialLocalPreferenceState: LocalPreferenceState = {

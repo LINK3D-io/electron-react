@@ -120,9 +120,15 @@ app.on('ready', () => {
 
   nfc.on('reader', (reader) => {
     console.log(`${reader.reader.name} device attached`);
+    if (mainWindow) {
+      mainWindow.webContents.send('device-attached');
+    }
 
     reader.on('card', (card) => {
       console.log('Card detected', card);
+      if (mainWindow) {
+        mainWindow.webContents.send('card-detected', card);
+      }
       // Send card information to the renderer process
       if (mainWindow) {
         mainWindow.webContents.send('card-detected', card);
@@ -135,6 +141,10 @@ app.on('ready', () => {
 
     reader.on('end', () => {
       console.log(`${reader.reader.name} device removed`);
+      if (mainWindow) {
+        mainWindow.webContents.send('device-removed');
+      }
+      // setOnline(false);
     });
   });
 
