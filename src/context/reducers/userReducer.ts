@@ -3,7 +3,6 @@ import { initialUserState, userActions, UserState } from '../types';
 
 // eslint-disable-next-line default-param-last
 const userReducer = (state: UserState = initialUserState, action: any) => {
-  console.log('userReducer', state, action);
   switch (action.type) {
     case userActions.SET_IS_AUTHENTICATED:
       return {

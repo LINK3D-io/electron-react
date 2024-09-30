@@ -12,6 +12,7 @@ import path from 'path';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { NFC } from 'nfc-pcsc';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
@@ -112,9 +113,45 @@ const createWindow = async () => {
   new AppUpdater();
 };
 
-/**
- * Add event listeners...
- */
+app.on('ready', () => {
+  createWindow();
+
+  const nfc = new NFC(); // Create an instance of NFC
+
+  nfc.on('reader', (reader) => {
+    console.log(`${reader.reader.name} device attached`);
+    if (mainWindow) {
+      mainWindow.webContents.send('device-attached');
+    }
+
+    reader.on('card', (card) => {
+      console.log('Card detected', card);
+      if (mainWindow) {
+        mainWindow.webContents.send('card-detected', card);
+      }
+      // Send card information to the renderer process
+      if (mainWindow) {
+        mainWindow.webContents.send('card-detected', card);
+      }
+    });
+
+    reader.on('error', (err) => {
+      console.error('Error occurred', err);
+    });
+
+    reader.on('end', () => {
+      console.log(`${reader.reader.name} device removed`);
+      if (mainWindow) {
+        mainWindow.webContents.send('device-removed');
+      }
+      // setOnline(false);
+    });
+  });
+
+  nfc.on('error', (err) => {
+    console.error('NFC error occurred', err);
+  });
+});
 
 app.on('window-all-closed', () => {
   // Respect the OSX convention of having the application in memory even

@@ -5,12 +5,12 @@ import Login from '../components/Login';
 import Home from '../components/Home';
 import useAuth from '../hooks/useAuth';
 import { UserContextProvider } from '../context/UserContext';
+import { ScannerContextProvider } from '../context/scannerContext';
 
 function Main() {
   const { user, refreshUser } = useAuth();
 
   useEffect(() => {
-    console.log('MAIN user', user.isAuthenticated);
     if (user.isAuthenticated === null) {
       refreshUser(); // initializes user when isAuthenticated is not set
     }
@@ -23,11 +23,13 @@ function Main() {
 export default function App() {
   return (
     <UserContextProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Main />} />
-        </Routes>
-      </Router>
+      <ScannerContextProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Main />} />
+          </Routes>
+        </Router>
+      </ScannerContextProvider>
     </UserContextProvider>
   );
 }
